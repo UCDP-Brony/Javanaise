@@ -25,7 +25,6 @@ public class JvnServerImpl
 	
   // A JVN server is managed as a singleton 
 	private static JvnServerImpl js = null;
-	private Registry registry;
 
   /**
   * Default constructor
@@ -33,7 +32,6 @@ public class JvnServerImpl
   **/
 	private JvnServerImpl() throws Exception {
 		super();
-		registry = LocateRegistry.getRegistry();
 		// to be completed
 	}
 	
@@ -82,17 +80,7 @@ public class JvnServerImpl
 	**/
 	public  void jvnRegisterObject(String jon, JvnObject jo)
 	throws jvn.JvnException {
-		try {
-			//TODO : currently remote
-			JvnObject joStub = (JvnObject) UnicastRemoteObject.exportObject(jo,0);
-			registry.bind(jon, joStub);
-		} catch (AlreadyBoundException e) {
-			e.printStackTrace();
-		} catch (AccessException e) {
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
+
 	}
 	
 	/**
@@ -103,16 +91,8 @@ public class JvnServerImpl
 	**/
 	public  JvnObject jvnLookupObject(String jon)
 	throws jvn.JvnException {
-		try {
-			return (JvnObject)registry.lookup(jon);
-		} catch (AccessException e) {
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (NotBoundException e) {
-			e.printStackTrace();
-		}
 		return null;
+		  
 	}	
 	
 	/**

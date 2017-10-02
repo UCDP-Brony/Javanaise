@@ -8,8 +8,15 @@
 
 package jvn;
 
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Hashtable;
 import java.io.Serializable;
+
 
 
 public class JvnCoordImpl 	
@@ -17,14 +24,17 @@ public class JvnCoordImpl
 							implements JvnRemoteCoord{
 	
 
-	
+	private Hashtable<String,JvnObject> objectTable;
+
+	private Registry registry;
 	
   /**
   * Default constructor
   * @throws JvnException
   **/
 	private JvnCoordImpl() throws Exception {
-		
+		registry = LocateRegistry.getRegistry();
+		objectTable = new Hashtable<String,JvnObject>();
 	}
 
   /**
@@ -48,8 +58,7 @@ public class JvnCoordImpl
   **/
   public synchronized void jvnRegisterObject(String jon, JvnObject jo, JvnRemoteServer js)
   throws java.rmi.RemoteException,jvn.JvnException{
-	 
-    // to be completed ?
+	  
   }
   
   /**
@@ -60,9 +69,17 @@ public class JvnCoordImpl
   **/
   public synchronized JvnObject jvnLookupObject(String jon, JvnRemoteServer js)
   throws java.rmi.RemoteException,jvn.JvnException{
-    // to be completed 
-    return null;
-  }
+		try {
+			return (JvnObject)registry.lookup(jon);
+		} catch (AccessException e) {
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
   
   /**
   * Get a Read lock on a JVN object managed by a given JVN server 
