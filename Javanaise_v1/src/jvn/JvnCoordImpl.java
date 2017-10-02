@@ -8,6 +8,9 @@
 
 package jvn;
 
+import java.rmi.AlreadyBoundException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.io.Serializable;
 
@@ -17,12 +20,14 @@ public class JvnCoordImpl
 							implements JvnRemoteCoord{
 	
 
+	
+	
   /**
   * Default constructor
   * @throws JvnException
   **/
 	private JvnCoordImpl() throws Exception {
-		// to be completed
+		
 	}
 
   /**
@@ -46,7 +51,8 @@ public class JvnCoordImpl
   **/
   public void jvnRegisterObject(String jon, JvnObject jo, JvnRemoteServer js)
   throws java.rmi.RemoteException,jvn.JvnException{
-    // to be completed 
+	 
+    // to be completed ?
   }
   
   /**

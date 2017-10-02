@@ -8,6 +8,7 @@
 package jvn;
 
 import java.io.*;
+import java.rmi.Remote;
 
 /**
  * Interface of a JVN object. 
@@ -15,7 +16,7 @@ import java.io.*;
  * a reference to a JVN object remotely
  */
 
-public interface JvnObject extends Serializable {
+public interface JvnObject extends Serializable, Remote{
 
 	/**
 	* Get a Read lock on the object 

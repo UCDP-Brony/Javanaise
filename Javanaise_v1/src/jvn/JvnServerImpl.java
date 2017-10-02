@@ -8,6 +8,11 @@
 
 package jvn;
 
+import java.rmi.AccessException;
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.io.*;
 
@@ -19,6 +24,7 @@ public class JvnServerImpl
 	
   // A JVN server is managed as a singleton 
 	private static JvnServerImpl js = null;
+	private Registry registry;
 
   /**
   * Default constructor
@@ -26,6 +32,7 @@ public class JvnServerImpl
   **/
 	private JvnServerImpl() throws Exception {
 		super();
+		registry = LocateRegistry.getRegistry();
 		// to be completed
 	}
 	
@@ -61,8 +68,9 @@ public class JvnServerImpl
 	**/
 	public  JvnObject jvnCreateObject(Serializable o)
 	throws jvn.JvnException { 
+		JvnObject object = new JvnObjectImpl(o);
 		// to be completed 
-		return null; 
+		return object; 
 	}
 	
 	/**
@@ -73,7 +81,16 @@ public class JvnServerImpl
 	**/
 	public  void jvnRegisterObject(String jon, JvnObject jo)
 	throws jvn.JvnException {
-		// to be completed 
+		try { 
+			JvnObject joStub = (JvnObject) UnicastRemoteObject.exportObject(jo,0);
+			registry.bind(jon, joStub);
+		} catch (AlreadyBoundException e) {
+			e.printStackTrace();
+		} catch (AccessException e) {
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
