@@ -10,6 +10,7 @@ package jvn;
 
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -81,7 +82,8 @@ public class JvnServerImpl
 	**/
 	public  void jvnRegisterObject(String jon, JvnObject jo)
 	throws jvn.JvnException {
-		try { 
+		try {
+			//TODO : currently remote
 			JvnObject joStub = (JvnObject) UnicastRemoteObject.exportObject(jo,0);
 			registry.bind(jon, joStub);
 		} catch (AlreadyBoundException e) {
@@ -101,7 +103,15 @@ public class JvnServerImpl
 	**/
 	public  JvnObject jvnLookupObject(String jon)
 	throws jvn.JvnException {
-    // to be completed 
+		try {
+			return (JvnObject)registry.lookup(jon);
+		} catch (AccessException e) {
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}	
 	

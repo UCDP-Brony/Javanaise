@@ -16,7 +16,7 @@ import java.rmi.Remote;
  * a reference to a JVN object remotely
  */
 
-public interface JvnObject extends Serializable, Remote{
+public interface JvnObject extends Serializable, Remote {
 
 	/**
 	* Get a Read lock on the object 
