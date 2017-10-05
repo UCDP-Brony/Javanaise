@@ -25,6 +25,9 @@ public class JvnServerImpl
 	
   // A JVN server is managed as a singleton 
 	private static JvnServerImpl js = null;
+	
+	//TODO : get the coordinator, probably through RMI, current version will crash since we call methods from a null object
+	private static JvnCoordImpl coord = null;
 
   /**
   * Default constructor
@@ -32,7 +35,7 @@ public class JvnServerImpl
   **/
 	private JvnServerImpl() throws Exception {
 		super();
-		// to be completed
+		// TODO : get the coordinator here
 	}
 	
   /**
@@ -67,8 +70,12 @@ public class JvnServerImpl
 	**/
 	public  JvnObject jvnCreateObject(Serializable o)
 	throws jvn.JvnException { 
-		JvnObject object = new JvnObjectImpl(o);
-		// to be completed 
+		JvnObject object = null;
+		try {
+			object = new JvnObjectImpl(o,coord.jvnGetObjectId());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		return object; 
 	}
 	
@@ -80,7 +87,11 @@ public class JvnServerImpl
 	**/
 	public  void jvnRegisterObject(String jon, JvnObject jo)
 	throws jvn.JvnException {
-
+		try {
+			coord.jvnRegisterObject(jon, jo, this);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -91,8 +102,13 @@ public class JvnServerImpl
 	**/
 	public  JvnObject jvnLookupObject(String jon)
 	throws jvn.JvnException {
+		try {
+			//not sure about the "this"
+			return coord.jvnLookupObject(jon, this);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		return null;
-		  
 	}	
 	
 	/**

@@ -2,6 +2,16 @@ package jvn;
 
 public class RegisteredObject {
 	    private JvnObject object;
+	    private String name;
+		private JvnRemoteServer currentOwner;
+		
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+	    
 	    public JvnObject getObject() {
 			return object;
 		}
@@ -14,6 +24,5 @@ public class RegisteredObject {
 		public void setCurrentOwner(JvnRemoteServer currentOwner) {
 			this.currentOwner = currentOwner;
 		}
-		private JvnRemoteServer currentOwner;
 	    
 }

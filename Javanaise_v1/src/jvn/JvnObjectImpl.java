@@ -6,11 +6,13 @@ public class JvnObjectImpl implements JvnObject {
 	
 	private Serializable object;
 	private JvnObjectState state;
+	private int ID;
 	
 	
-	public JvnObjectImpl(Serializable o){
+	public JvnObjectImpl(Serializable o, int ID){
 		object = o;
 		state = JvnObjectState.W;
+		this.ID = ID;
 	}
 
 	public void jvnLockRead() throws JvnException {
@@ -81,8 +83,7 @@ public class JvnObjectImpl implements JvnObject {
 	}
 
 	public int jvnGetObjectId() throws JvnException {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.ID;
 	}
 
 	public Serializable jvnGetObjectState() throws JvnException {

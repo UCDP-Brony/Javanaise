@@ -44,8 +44,7 @@ public class JvnCoordImpl
   **/
   public synchronized int jvnGetObjectId()
   throws java.rmi.RemoteException,jvn.JvnException {
-    // to be completed 
-    return 0;
+	  return objectRegistry.getUniqueID();
   }
   
   /**
@@ -58,7 +57,7 @@ public class JvnCoordImpl
   **/
   public synchronized void jvnRegisterObject(String jon, JvnObject jo, JvnRemoteServer js)
   throws java.rmi.RemoteException,jvn.JvnException{
-	  
+	  objectRegistry.registerObject(jon, jo, js);
   }
   
   /**
@@ -69,16 +68,8 @@ public class JvnCoordImpl
   **/
   public synchronized JvnObject jvnLookupObject(String jon, JvnRemoteServer js)
   throws java.rmi.RemoteException,jvn.JvnException{
-		try {
-			return (JvnObject)registry.lookup(jon);
-		} catch (AccessException e) {
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (NotBoundException e) {
-			e.printStackTrace();
-		}
-		return null;
+	  //TODO : very poorly optimized
+	  return objectRegistry.lookupObject(jon, js);
 	}
   
   /**
