@@ -24,7 +24,7 @@ public class JvnCoordImpl
 							implements JvnRemoteCoord{
 	
 
-	private Hashtable<String,JvnObject> objectTable;
+	private JvnObjectRegistry objectRegistry;
 
 	private Registry registry;
 	
@@ -34,7 +34,7 @@ public class JvnCoordImpl
   **/
 	private JvnCoordImpl() throws Exception {
 		registry = LocateRegistry.getRegistry();
-		objectTable = new Hashtable<String,JvnObject>();
+		objectRegistry = new JvnObjectRegistry();
 	}
 
   /**
