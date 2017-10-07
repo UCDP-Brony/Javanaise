@@ -10,12 +10,14 @@ package jvn;
 
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
+import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.io.*;
+import java.net.InetAddress;
 
 
 
@@ -26,8 +28,11 @@ public class JvnServerImpl
   // A JVN server is managed as a singleton 
 	private static JvnServerImpl js = null;
 	
-	//TODO : get the coordinator, probably through RMI, current version will crash since we call methods from a null object
-	private static JvnCoordImpl coord = null;
+	private static JvnRemoteCoord coord ;
+
+	private final static String COORD = "/coord";
+	
+	
 
   /**
   * Default constructor
@@ -35,7 +40,19 @@ public class JvnServerImpl
   **/
 	private JvnServerImpl() throws Exception {
 		super();
-		// TODO : get the coordinator here
+		//will currently only work on one machine
+		//TODO : agree on a static address
+		String address = "rmi://" + InetAddress.getLocalHost().getHostAddress() + COORD;
+		try{
+			this.coord = (JvnRemoteCoord) Naming.lookup(address);
+		}
+		catch (NotBoundException e){
+			//not bound yet, we're the first client, we create a coordinator and bind it
+			JvnCoordImpl JVI = new JvnCoordImpl();
+			Naming.rebind(address, JVI);
+			this.coord = (JvnRemoteCoord) Naming.lookup(address);
+		}
+		
 	}
 	
   /**
@@ -60,7 +77,11 @@ public class JvnServerImpl
 	**/
 	public  void jvnTerminate()
 	throws jvn.JvnException {
-    // to be completed 
+		try {
+			coord.jvnTerminate(js);
+		} catch (RemoteException e) {
+			throw new jvn.JvnException("terminate error : "+e);
+		}
 	} 
 	
 	/**
@@ -74,7 +95,7 @@ public class JvnServerImpl
 		try {
 			object = new JvnObjectImpl(o,coord.jvnGetObjectId());
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			throw new jvn.JvnException("createObject error : "+e);
 		}
 		return object; 
 	}
@@ -90,7 +111,7 @@ public class JvnServerImpl
 		try {
 			coord.jvnRegisterObject(jon, jo, this);
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			throw new jvn.JvnException("registerObject error : "+e);
 		}
 	}
 	
@@ -103,12 +124,10 @@ public class JvnServerImpl
 	public  JvnObject jvnLookupObject(String jon)
 	throws jvn.JvnException {
 		try {
-			//not sure about the "this"
-			return coord.jvnLookupObject(jon, this);
+			return coord.jvnLookupObject(jon, js);
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			throw new jvn.JvnException("lookupObject error : "+e);
 		}
-		return null;
 	}	
 	
 	/**

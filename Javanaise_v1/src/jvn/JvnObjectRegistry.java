@@ -48,8 +48,9 @@ public class JvnObjectRegistry {
 		 int i = 0;
 		 while(i < MAXENTRY && !(registry[i].getName().equals(jon) && registry[i].getCurrentOwner() == js))
 			 i++;
-		 if(i == MAXENTRY)
-			 throw new jvn.JvnException();
+		 if(i == MAXENTRY){
+			 return null;
+		 }
 		 return registry[i].getObject();
 		 
 	 }
