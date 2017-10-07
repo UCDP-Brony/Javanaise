@@ -8,13 +8,8 @@
 
 package jvn;
 
-import java.rmi.AccessException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
+
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Hashtable;
 import java.io.Serializable;
 
 
@@ -25,15 +20,12 @@ public class JvnCoordImpl
 	
 
 	private JvnObjectRegistry objectRegistry;
-
-	private Registry registry;
 	
   /**
   * Default constructor
   * @throws JvnException
   **/
 	public JvnCoordImpl() throws Exception {
-		registry = LocateRegistry.getRegistry();
 		objectRegistry = new JvnObjectRegistry();
 	}
 

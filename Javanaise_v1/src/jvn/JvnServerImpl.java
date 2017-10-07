@@ -18,6 +18,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.io.*;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 
 
 
@@ -33,25 +34,15 @@ public class JvnServerImpl
 	private final static String COORD = "/coord";
 	
 	
-
   /**
   * Default constructor
   * @throws JvnException
   **/
 	private JvnServerImpl() throws Exception {
 		super();
-		//will currently only work on one machine
 		//TODO : agree on a static address
-		String address = "rmi://" + InetAddress.getLocalHost().getHostAddress() + COORD;
-		try{
-			this.coord = (JvnRemoteCoord) Naming.lookup(address);
-		}
-		catch (NotBoundException e){
-			//not bound yet, we're the first client, we create a coordinator and bind it
-			JvnCoordImpl JVI = new JvnCoordImpl();
-			Naming.rebind(address, JVI);
-			this.coord = (JvnRemoteCoord) Naming.lookup(address);
-		}
+		String address = "//localhost:1050"+ COORD;
+		this.coord = (JvnRemoteCoord) Naming.lookup(address);
 		
 	}
 	
