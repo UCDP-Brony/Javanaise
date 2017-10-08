@@ -12,7 +12,7 @@ public class CoordLauncher {
 	static String address = "//localhost:1050/coord";
 	
 	public static void main(String [] args){
-		Registry rmiRegistry;
+		Registry registry;
 		JvnCoordImpl JVI = null;
 		try {
 			JVI = new JvnCoordImpl();
@@ -20,7 +20,7 @@ public class CoordLauncher {
 			e1.printStackTrace();
 		}
 		try{
-			rmiRegistry = LocateRegistry.createRegistry(1050);
+			registry = LocateRegistry.createRegistry(1050);
 			Naming.rebind(address, JVI);
 		} catch (RemoteException e) {
 			e.printStackTrace();

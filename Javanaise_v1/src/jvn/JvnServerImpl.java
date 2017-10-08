@@ -31,7 +31,7 @@ public class JvnServerImpl
 	
 	private static JvnRemoteCoord coord ;
 
-	private final static String COORD = "/coord";
+	private final static String COORD = "//localhost:1050/coord";
 	
 	
   /**
@@ -41,8 +41,22 @@ public class JvnServerImpl
 	private JvnServerImpl() throws Exception {
 		super();
 		//TODO : agree on a static address
-		String address = "//localhost:1050"+ COORD;
-		this.coord = (JvnRemoteCoord) Naming.lookup(address);
+		try{
+			this.coord = (JvnRemoteCoord) Naming.lookup(COORD);
+		}
+		catch(NotBoundException e){
+			System.out.println("fail");
+			e.printStackTrace();
+		}
+		catch(MalformedURLException e){
+			System.out.println("fail");
+			e.printStackTrace();
+		}
+		catch(RemoteException e){
+			System.out.println("fail");
+			
+		}
+		
 		
 	}
 	

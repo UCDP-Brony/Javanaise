@@ -26,7 +26,7 @@ public class JvnCoordImpl
   * @throws JvnException
   **/
 	public JvnCoordImpl() throws Exception {
-		objectRegistry = new JvnObjectRegistry();
+		this.objectRegistry = new JvnObjectRegistry();
 	}
 
   /**
