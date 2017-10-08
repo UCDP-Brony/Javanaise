@@ -48,8 +48,7 @@ public class JvnObjectRegistry {
 	
 	 public JvnObject lookupObject(String jon, JvnRemoteServer js) throws jvn.JvnException{
 		 int i = 0;
-		 while(i < MAXENTRY && !(jon.equals(registry[i].getName()) && registry[i].getCurrentOwner() == js)){
-			 System.out.println(i);
+		 while(i < MAXENTRY && !jon.equals(registry[i].getName())){
 			 i++;
 		 }
 			 
