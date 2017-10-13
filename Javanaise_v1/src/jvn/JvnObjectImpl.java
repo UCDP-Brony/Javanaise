@@ -2,7 +2,7 @@ package jvn;
 
 import java.io.Serializable;
 
-public class JvnObjectImpl implements JvnObject {
+public class JvnObjectImpl implements JvnObject  {
 	
 	private Serializable object;
 	private JvnObjectState state;
@@ -28,6 +28,7 @@ public class JvnObjectImpl implements JvnObject {
 			state = JvnObjectState.RWC;
 		}
 		default:{
+			object = JvnServerImpl.jvnGetServer().jvnLockRead(ID);
 			state = JvnObjectState.R;
 			break;
 		}
@@ -80,6 +81,8 @@ public class JvnObjectImpl implements JvnObject {
 			throw new JvnException("Unreachable code.");
 		}
 		}
+		
+		
 	}
 
 	public int jvnGetObjectId() throws JvnException {
@@ -91,18 +94,16 @@ public class JvnObjectImpl implements JvnObject {
 	}
 
 	public void jvnInvalidateReader() throws JvnException {
-		// TODO Auto-generated method stub
+		//TODO
 
 	}
 
 	public Serializable jvnInvalidateWriter() throws JvnException {
-		// TODO Auto-generated method stub
-		return null;
+		return object;
 	}
 
 	public Serializable jvnInvalidateWriterForReader() throws JvnException {
-		// TODO Auto-generated method stub
-		return null;
+		return object;
 	}
 
 }

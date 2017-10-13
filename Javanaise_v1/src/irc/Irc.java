@@ -58,7 +58,7 @@ public class Irc {
 	public Irc(JvnObject jo) {
 		sentence = jo;
 		frame=new Frame();
-		frame.setLayout(new GridLayout(1,1));
+		frame.setLayout(new GridLayout(0,2));
 		text=new TextArea(10,60);
 		text.setEditable(false);
 		text.setForeground(Color.red);

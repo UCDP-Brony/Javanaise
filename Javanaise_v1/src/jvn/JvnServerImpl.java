@@ -143,9 +143,12 @@ public class JvnServerImpl
 	**/
    public Serializable jvnLockRead(int joi)
 	 throws JvnException {
-		// to be completed 
-		return null;
-
+	   try {
+		return coord.jvnLockRead(joi, js);
+	   } catch (RemoteException e) {
+		e.printStackTrace();
+	   }
+	   return null;
 	}	
 	/**
 	* Get a Write lock on a JVN object 
@@ -155,8 +158,12 @@ public class JvnServerImpl
 	**/
    public Serializable jvnLockWrite(int joi)
 	 throws JvnException {
-		// to be completed 
-		return null;
+	   try {
+			return coord.jvnLockWrite(joi, js);
+		   } catch (RemoteException e) {
+			e.printStackTrace();
+		   }
+		   return null;
 	}	
 
 	

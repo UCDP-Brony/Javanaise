@@ -30,7 +30,7 @@ public class CoordLauncher {
 		
 		while(true){
 			//infite loop, we want the coordinator to keep going
-			//TODO : create a wait to stop the launcher and coordinator properly
+			//TODO : create a way to stop the launcher and coordinator properly
 		}
 	}
 }

@@ -73,8 +73,7 @@ public class JvnCoordImpl
   **/
    public synchronized Serializable jvnLockRead(int joi, JvnRemoteServer js)
    throws java.rmi.RemoteException, JvnException{
-    // to be completed
-    return null;
+	   return objectRegistry.getObject(joi);
    }
 
   /**
@@ -86,8 +85,7 @@ public class JvnCoordImpl
   **/
    public synchronized Serializable jvnLockWrite(int joi, JvnRemoteServer js)
    throws java.rmi.RemoteException, JvnException{
-    // to be completed
-    return null;
+	   return objectRegistry.getObject(joi);
    }
 
 	/**
