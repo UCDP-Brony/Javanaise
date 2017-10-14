@@ -16,6 +16,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Hashtable;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -32,6 +33,8 @@ public class JvnServerImpl
 	private static JvnRemoteCoord coord ;
 
 	private final static String COORD = "//localhost:1050/coord";
+	
+	private Hashtable<Integer, JvnObject> localObjectTable;
 	
 	
   /**
@@ -56,7 +59,7 @@ public class JvnServerImpl
 			System.out.println("fail");
 			
 		}
-		
+		localObjectTable = new Hashtable<Integer, JvnObject>();
 		
 	}
 	
@@ -98,7 +101,9 @@ public class JvnServerImpl
 	throws jvn.JvnException { 
 		JvnObject object = null;
 		try {
-			object = new JvnObjectImpl(o,coord.jvnGetObjectId());
+			int id = coord.jvnGetObjectId();
+			object = new JvnObjectImpl(o,id);
+			localObjectTable.put(id,object);
 		} catch (RemoteException e) {
 			throw new jvn.JvnException("createObject error : "+e);
 		}
@@ -128,11 +133,17 @@ public class JvnServerImpl
 	**/
 	public  JvnObject jvnLookupObject(String jon)
 	throws jvn.JvnException {
+		JvnObject o = null;
 		try {
-			return coord.jvnLookupObject(jon, js);
+			o = coord.jvnLookupObject(jon, js);
 		} catch (RemoteException e) {
 			throw new jvn.JvnException("lookupObject error : "+e);
 		}
+		//check if the object is already in our cache, if it's not, add it
+		if(localObjectTable.get(o.jvnGetObjectId()) == null){
+			localObjectTable.put(o.jvnGetObjectId(), o);
+		}
+		return o;
 	}	
 	
 	/**
@@ -143,12 +154,14 @@ public class JvnServerImpl
 	**/
    public Serializable jvnLockRead(int joi)
 	 throws JvnException {
+	   Serializable objectState = localObjectTable.get(joi);
 	   try {
-		return coord.jvnLockRead(joi, js);
+		   //update our cache
+		   objectState = coord.jvnLockRead(joi, js);
 	   } catch (RemoteException e) {
 		e.printStackTrace();
 	   }
-	   return null;
+	   return objectState;
 	}	
 	/**
 	* Get a Write lock on a JVN object 
@@ -158,12 +171,13 @@ public class JvnServerImpl
 	**/
    public Serializable jvnLockWrite(int joi)
 	 throws JvnException {
+	   Serializable objectState = localObjectTable.get(joi);
 	   try {
-			return coord.jvnLockWrite(joi, js);
+		   objectState = coord.jvnLockWrite(joi, js);
 		   } catch (RemoteException e) {
 			e.printStackTrace();
 		   }
-		   return null;
+		   return objectState;
 	}	
 
 	
@@ -176,7 +190,7 @@ public class JvnServerImpl
 	**/
   public void jvnInvalidateReader(int joi)
 	throws java.rmi.RemoteException,jvn.JvnException {
-		// to be completed 
+		localObjectTable.get(joi).jvnInvalidateReader();
 	};
 	    
 	/**
@@ -187,8 +201,7 @@ public class JvnServerImpl
 	**/
   public Serializable jvnInvalidateWriter(int joi)
 	throws java.rmi.RemoteException,jvn.JvnException { 
-		// to be completed 
-		return null;
+	  return localObjectTable.get(joi).jvnInvalidateWriter();
 	};
 	
 	/**
@@ -199,8 +212,7 @@ public class JvnServerImpl
 	**/
    public Serializable jvnInvalidateWriterForReader(int joi)
 	 throws java.rmi.RemoteException,jvn.JvnException { 
-		// to be completed 
-		return null;
+	   return localObjectTable.get(joi).jvnInvalidateWriterForReader();
 	 };
 
 }

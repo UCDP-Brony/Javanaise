@@ -21,7 +21,7 @@ public class JvnObjectImpl implements JvnObject  {
 			break;
 		}
 		case W:{
-			//TODO
+			//Nothing to be done
 			break;
 		}
 		case WC:{
@@ -37,16 +37,22 @@ public class JvnObjectImpl implements JvnObject  {
 
 	public void jvnLockWrite() throws JvnException {
 		switch(state){
+		
+		case NL:
+			JvnServerImpl.jvnGetServer().jvnLockWrite(this.ID);
+			state = JvnObjectState.W;
+			break;
 		case R:{
-			//TODO
+			JvnServerImpl.jvnGetServer().jvnLockWrite(this.ID);
+			state = JvnObjectState.W;
 			break;
 		}
 		case W: {
-			//TODO
+			//Already okay
 			break;
 		}
 		case RWC:{
-			//TODO
+			//Already okay
 			break;
 		}
 		default:
@@ -94,7 +100,7 @@ public class JvnObjectImpl implements JvnObject  {
 	}
 
 	public void jvnInvalidateReader() throws JvnException {
-		//TODO
+		state = JvnObjectState.NL;
 
 	}
 
