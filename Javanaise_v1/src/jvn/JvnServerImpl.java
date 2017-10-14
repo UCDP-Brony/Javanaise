@@ -139,10 +139,13 @@ public class JvnServerImpl
 		} catch (RemoteException e) {
 			throw new jvn.JvnException("lookupObject error : "+e);
 		}
-		//check if the object is already in our cache, if it's not, add it
-		if(localObjectTable.get(o.jvnGetObjectId()) == null){
-			localObjectTable.put(o.jvnGetObjectId(), o);
+		if (o != null){
+			//check if the object is already in our cache, if it's not, add it
+			if(localObjectTable.get(o.jvnGetObjectId()) == null){
+				localObjectTable.put(o.jvnGetObjectId(), o);
+			}
 		}
+		
 		return o;
 	}	
 	
