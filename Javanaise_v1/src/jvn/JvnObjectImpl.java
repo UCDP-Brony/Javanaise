@@ -39,11 +39,11 @@ public class JvnObjectImpl implements JvnObject  {
 		switch(state){
 		
 		case NL:
-			JvnServerImpl.jvnGetServer().jvnLockWrite(this.ID);
+			object =JvnServerImpl.jvnGetServer().jvnLockWrite(this.ID);
 			state = JvnObjectState.W;
 			break;
 		case R:{
-			JvnServerImpl.jvnGetServer().jvnLockWrite(this.ID);
+			object =JvnServerImpl.jvnGetServer().jvnLockWrite(this.ID);
 			state = JvnObjectState.W;
 			break;
 		}
