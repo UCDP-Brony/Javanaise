@@ -43,7 +43,6 @@ public class JvnServerImpl
   **/
 	private JvnServerImpl() throws Exception {
 		super();
-		//TODO : agree on a static address
 		try{
 			this.coord = (JvnRemoteCoord) Naming.lookup(COORD);
 		}
@@ -103,7 +102,6 @@ public class JvnServerImpl
 		try {
 			int id = coord.jvnGetObjectId();
 			object = new JvnObjectImpl(o,id);
-			localObjectTable.put(id,object);
 		} catch (RemoteException e) {
 			throw new jvn.JvnException("createObject error : "+e);
 		}
@@ -141,10 +139,8 @@ public class JvnServerImpl
 			throw new jvn.JvnException("lookupObject error : "+e);
 		}
 		if (o != null){
-			//check if the object is already in our cache, if it's not, add it
-			if(localObjectTable.get(o.jvnGetObjectId()) == null){
-				localObjectTable.put(o.jvnGetObjectId(), o);
-			}
+			//update the cache
+			localObjectTable.put(o.jvnGetObjectId(), o);
 		}
 		
 		return o;

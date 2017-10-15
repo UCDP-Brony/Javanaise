@@ -89,7 +89,7 @@ public class JvnObjectImpl implements JvnObject  {
 		}
 		}
 		
-		
+		this.notify();
 	}
 
 	public int jvnGetObjectId() throws JvnException {
@@ -101,15 +101,76 @@ public class JvnObjectImpl implements JvnObject  {
 	}
 
 	public void jvnInvalidateReader() throws JvnException {
+		switch(state){
+		case R:
+			try{
+				this.wait();
+			}catch(InterruptedException e){
+				
+			}
+			break;
+		case RC:
+			break;
+		case RWC:
+			try{
+				this.wait();
+			}catch(InterruptedException e){
+				
+			}
+			break;
+		default:
+			break;
+		
+		}
 		state = JvnObjectState.NL;
 
 	}
 
 	public Serializable jvnInvalidateWriter() throws JvnException {
+		switch(state){
+		case RWC:
+			try{
+				this.wait();
+			}catch(InterruptedException e){
+				
+			}
+			break;
+		case W:
+			try{
+				this.wait();
+			}catch(InterruptedException e){
+				
+			}
+			break;
+		default:
+			break;
+		
+		}
+		state = JvnObjectState.NL;
 		return object;
 	}
 
 	public Serializable jvnInvalidateWriterForReader() throws JvnException {
+		switch(state){
+		case RWC:
+			try{
+				this.wait();
+			}catch(InterruptedException e){
+				
+			}
+			break;
+		case W:
+			try{
+				this.wait();
+			}catch(InterruptedException e){
+				
+			}
+			break;
+		default:
+			break;
+		
+		}
+		state = JvnObjectState.NL;
 		return object;
 	}
 
