@@ -73,7 +73,23 @@ public class JvnCoordImpl
   **/
    public synchronized Serializable jvnLockRead(int joi, JvnRemoteServer js)
    throws java.rmi.RemoteException, JvnException{
-	   return objectRegistry.getObject(joi);
+	   RegisteredObject ro = objectRegistry.getRegisteredObject(joi);
+	   Serializable o = null;
+	   if(ro.getCurrentWriter() != null){
+		   //Writing ongoing
+		   //checking if it's not us just in case
+		   if(!ro.getCurrentWriter().equals(js)){
+			   o = ro.getCurrentWriter().jvnInvalidateWriterForReader(joi);
+			   ro.removeWriter();
+			   ro.addReaders(js);
+		   }
+		   ro.getObject().setSerializable(o);
+	   }
+	   else{
+		   ro.addReaders(js);
+		   o = ro.getObject();
+	   }
+	   return o;
    }
 
   /**
@@ -85,7 +101,24 @@ public class JvnCoordImpl
   **/
    public synchronized Serializable jvnLockWrite(int joi, JvnRemoteServer js)
    throws java.rmi.RemoteException, JvnException{
-	   return objectRegistry.getObject(joi);
+	   RegisteredObject ro = objectRegistry.getRegisteredObject(joi);
+	   Serializable o = null;
+	   if(ro.getCurrentWriter() != null){
+		   o = ro.getCurrentWriter().jvnInvalidateWriter(joi);
+		   ro.getObject().setSerializable(o);
+	   }
+	   else{
+		   o = ro.getObject();
+	   }
+	   //signal all readers
+	   for(JvnRemoteServer server : ro.getCurrentReaders()){
+		   if(!js.equals(server)){
+			   server.jvnInvalidateReader(joi);
+		   }
+	   }
+	   ro.removeAllReaders();
+	   ro.addWriter(js);
+	   return o;
    }
 
 	/**

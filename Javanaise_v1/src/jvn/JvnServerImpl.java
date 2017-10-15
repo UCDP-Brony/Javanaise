@@ -120,6 +120,7 @@ public class JvnServerImpl
 	throws jvn.JvnException {
 		try {
 			coord.jvnRegisterObject(jon, jo, this);
+			localObjectTable.put(jo.jvnGetObjectId(),jo);
 		} catch (RemoteException e) {
 			throw new jvn.JvnException("registerObject error : "+e);
 		}
@@ -157,9 +158,8 @@ public class JvnServerImpl
 	**/
    public Serializable jvnLockRead(int joi)
 	 throws JvnException {
-	   Serializable objectState = localObjectTable.get(joi);
+	   Serializable objectState = null;
 	   try {
-		   //update our cache
 		   objectState = coord.jvnLockRead(joi, js);
 	   } catch (RemoteException e) {
 		e.printStackTrace();

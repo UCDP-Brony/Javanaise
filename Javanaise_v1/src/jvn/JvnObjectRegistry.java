@@ -18,7 +18,7 @@ public class JvnObjectRegistry {
 		return idMachine;
 	}
 	
-	public void registerObject(String jon, JvnObject o, JvnRemoteServer owner){
+	public void registerObject(String jon, JvnObject o, JvnRemoteServer server){
 		int id = 0;
 		try {
 			id = o.jvnGetObjectId();
@@ -26,25 +26,20 @@ public class JvnObjectRegistry {
 			e.printStackTrace();
 		}
 		registry[id].setObject(o);
-		registry[id].setCurrentOwner(owner);
+		registry[id].addServers(server);
+		registry[id].addWriter(server);
 		registry[id].setName(jon);
 	}
 	
-	public JvnObject getObject(int id){
-		return registry[id].getObject();
-	}
-	
-	public JvnRemoteServer getObjectOwner(int id){
-		return registry[id].getCurrentOwner();
+	public RegisteredObject getRegisteredObject(int id){
+		return registry[id];
 	}
 	
 	public void setObject(int id, JvnObject o){
 		registry[id].setObject(o);
 	}
 	
-	public void setObjectOwner(int id, JvnRemoteServer s){
-		registry[id].setCurrentOwner(s);
-	}
+	
 	
 	 public JvnObject lookupObject(String jon, JvnRemoteServer js) throws jvn.JvnException{
 		 int i = 0;
@@ -55,9 +50,12 @@ public class JvnObjectRegistry {
 		 if(i == MAXENTRY){
 			 return null;
 		 }
+		 registry[i].addServers(js);
 		 return registry[i].getObject();
 		 
 	 }
+	 
+	 
 	
 }
 

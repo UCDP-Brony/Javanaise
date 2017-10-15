@@ -1,9 +1,17 @@
 package jvn;
+import java.util.ArrayList;
 
 public class RegisteredObject {
 	    private JvnObject object;
 	    private String name;
-		private JvnRemoteServer currentOwner;
+		private JvnRemoteServer writer;
+		private ArrayList<JvnRemoteServer> readers;
+		private ArrayList<JvnRemoteServer> servers;
+		
+		public RegisteredObject(){
+			this.servers = new ArrayList<JvnRemoteServer>();
+			this.readers = new ArrayList<JvnRemoteServer>();
+		}
 		
 		public String getName() {
 			return name;
@@ -18,11 +26,34 @@ public class RegisteredObject {
 		public void setObject(JvnObject object) {
 			this.object = object;
 		}
-		public JvnRemoteServer getCurrentOwner() {
-			return currentOwner;
+		public JvnRemoteServer getCurrentWriter() {
+			return this.writer;
 		}
-		public void setCurrentOwner(JvnRemoteServer currentOwner) {
-			this.currentOwner = currentOwner;
+		public void addWriter(JvnRemoteServer writer) {
+			this.writer = writer;
 		}
-	    
+		public void removeWriter() {
+			this.writer = null;
+		}
+		public ArrayList<JvnRemoteServer> getCurrentReaders() {
+			return readers;
+		}
+		public void addReaders(JvnRemoteServer reader) {
+			readers.add(reader);
+		}
+		public void removeReader(JvnRemoteServer server){
+			readers.remove(server);
+		}
+		public void removeAllReaders(){
+			readers.clear();
+		}
+		public ArrayList<JvnRemoteServer> getCurrentServers() {
+			return servers;
+		}
+		public void addServers(JvnRemoteServer server) {
+			servers.add(server);
+		}
+		public void removeServer(JvnRemoteServer server){
+			servers.remove(server);
+		}
 }

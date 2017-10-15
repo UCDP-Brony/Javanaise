@@ -112,4 +112,8 @@ public class JvnObjectImpl implements JvnObject  {
 		return object;
 	}
 
+	public void setSerializable(Serializable s) throws JvnException {
+		this.object = s;
+	}
+
 }
