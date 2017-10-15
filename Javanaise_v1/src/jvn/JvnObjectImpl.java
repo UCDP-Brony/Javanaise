@@ -26,6 +26,7 @@ public class JvnObjectImpl implements JvnObject  {
 		}
 		case WC:{
 			state = JvnObjectState.RWC;
+			break;
 		}
 		default:{
 			object = JvnServerImpl.jvnGetServer().jvnLockRead(ID);
