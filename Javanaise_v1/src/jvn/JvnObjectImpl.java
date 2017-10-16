@@ -62,7 +62,7 @@ public class JvnObjectImpl implements JvnObject  {
 		}
 	}
 
-	public void jvnUnLock() throws JvnException {
+	synchronized public void jvnUnLock() throws JvnException {
 		switch(state){
 		case NL:{
 			throw new JvnException("No lock to unlock.");
