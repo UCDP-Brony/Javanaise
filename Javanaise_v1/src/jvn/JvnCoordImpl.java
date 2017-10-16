@@ -75,13 +75,15 @@ public class JvnCoordImpl
    throws java.rmi.RemoteException, JvnException{
 	   RegisteredObject ro = objectRegistry.getRegisteredObject(joi);
 	   Serializable o = null;
-	   if(ro.getCurrentWriter() != null){
+	   JvnRemoteServer serv = ro.getCurrentWriter();
+	   if(serv != null){
 		   //Writing ongoing
 		   //checking if it's not us just in case
-		   if(!ro.getCurrentWriter().equals(js)){
-			   o = ro.getCurrentWriter().jvnInvalidateWriterForReader(joi);
+		   if(!serv.equals(js)){
+			   o = serv.jvnInvalidateWriterForReader(joi);
 			   ro.removeWriter();
 			   ro.addReaders(js);
+			   ro.addReaders(serv);
 		   }
 		   ro.getObject().setSerializable(o);
 	   }
