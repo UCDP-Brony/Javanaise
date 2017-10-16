@@ -100,7 +100,7 @@ public class JvnObjectImpl implements JvnObject  {
 		return object;
 	}
 
-	public void jvnInvalidateReader() throws JvnException {
+	synchronized public void jvnInvalidateReader() throws JvnException {
 		switch(state){
 		case R:
 			try{
@@ -126,7 +126,7 @@ public class JvnObjectImpl implements JvnObject  {
 
 	}
 
-	public Serializable jvnInvalidateWriter() throws JvnException {
+	synchronized public Serializable jvnInvalidateWriter() throws JvnException {
 		switch(state){
 		case RWC:
 			try{
@@ -150,7 +150,7 @@ public class JvnObjectImpl implements JvnObject  {
 		return object;
 	}
 
-	public Serializable jvnInvalidateWriterForReader() throws JvnException {
+	synchronized public Serializable jvnInvalidateWriterForReader() throws JvnException {
 		switch(state){
 		case RWC:
 			try{
@@ -176,6 +176,10 @@ public class JvnObjectImpl implements JvnObject  {
 
 	public void setSerializable(Serializable s) throws JvnException {
 		this.object = s;
+	}
+
+	public void jvnSetToNoLock() throws JvnException {
+		state = JvnObjectState.NL;
 	}
 
 }

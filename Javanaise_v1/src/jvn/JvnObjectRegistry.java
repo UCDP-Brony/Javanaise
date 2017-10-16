@@ -51,6 +51,7 @@ public class JvnObjectRegistry {
 			 return null;
 		 }
 		 registry[i].addServers(js);
+		 registry[i].getObject().jvnSetToNoLock();
 		 return registry[i].getObject();
 		 
 	 }
