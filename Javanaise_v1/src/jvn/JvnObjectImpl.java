@@ -17,21 +17,23 @@ public class JvnObjectImpl implements JvnObject  {
 
 	public void jvnLockRead() throws JvnException {
 		switch(state){
-		case RWC:{
+		case RC:{
+			state = JvnObjectState.R;
 			break;
 		}
-		case W:{
-			//Nothing to be done
-			break;
-		}
+
 		case WC:{
 			state = JvnObjectState.RWC;
 			break;
 		}
-		default:{
+		
+		case NL:{
 			object = JvnServerImpl.jvnGetServer().jvnLockRead(ID);
 			state = JvnObjectState.R;
 			break;
+		}
+		default:{
+			throw new JvnException("Unreachable code reached.");
 		}
 		}
 	}
@@ -48,17 +50,26 @@ public class JvnObjectImpl implements JvnObject  {
 			state = JvnObjectState.W;
 			break;
 		}
+		case RC:{
+			object =JvnServerImpl.jvnGetServer().jvnLockWrite(this.ID);
+			state = JvnObjectState.W;
+			break;
+		}
 		case W: {
 			//Already okay
 			break;
 		}
 		case RWC:{
-			//Already okay
-			break;
-		}
-		default:
 			state = JvnObjectState.W;
 			break;
+		}
+		case WC:{
+			state = JvnObjectState.W;
+			break;
+		}
+		default:{
+			throw new JvnException("Unreachable code reached.");
+		}
 		}
 	}
 
@@ -82,6 +93,7 @@ public class JvnObjectImpl implements JvnObject  {
 			break;
 		}
 		case RWC:{
+			state = JvnObjectState.WC;
 			break;
 		}
 		default:{
@@ -108,8 +120,7 @@ public class JvnObjectImpl implements JvnObject  {
 			}catch(InterruptedException e){
 				
 			}
-			break;
-		case RC:
+			state = JvnObjectState.NL;
 			break;
 		case RWC:
 			try{
@@ -117,12 +128,16 @@ public class JvnObjectImpl implements JvnObject  {
 			}catch(InterruptedException e){
 				
 			}
+			state = JvnObjectState.NL;
+			break;
+		case RC:
+			state = JvnObjectState.NL;
 			break;
 		default:
 			break;
 		
 		}
-		state = JvnObjectState.NL;
+		
 
 	}
 
@@ -134,6 +149,7 @@ public class JvnObjectImpl implements JvnObject  {
 			}catch(InterruptedException e){
 				
 			}
+			state = JvnObjectState.NL;
 			break;
 		case W:
 			try{
@@ -141,12 +157,15 @@ public class JvnObjectImpl implements JvnObject  {
 			}catch(InterruptedException e){
 				
 			}
+			state = JvnObjectState.NL;
+			break;
+		case WC:
+			state = JvnObjectState.NL;
 			break;
 		default:
 			break;
 		
 		}
-		state = JvnObjectState.NL;
 		return object;
 	}
 
@@ -158,6 +177,8 @@ public class JvnObjectImpl implements JvnObject  {
 			}catch(InterruptedException e){
 				
 			}
+			state = JvnObjectState.R;
+
 			break;
 		case W:
 			try{
@@ -165,12 +186,16 @@ public class JvnObjectImpl implements JvnObject  {
 			}catch(InterruptedException e){
 				
 			}
+			state = JvnObjectState.RC;
+
 			break;
+		case WC:
+			state = JvnObjectState.RC;
+
 		default:
 			break;
 		
 		}
-		state = JvnObjectState.NL;
 		return object;
 	}
 

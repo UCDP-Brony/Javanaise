@@ -87,7 +87,7 @@ public class JvnCoordImpl
 	   }
 	   else{
 		   ro.addReaders(js);
-		   o = ro.getObject();
+		   o = ro.getObject().jvnGetObjectState();
 	   }
 	   return o;
    }
@@ -108,7 +108,7 @@ public class JvnCoordImpl
 		   ro.getObject().setSerializable(o);
 	   }
 	   else{
-		   o = ro.getObject();
+		   o = ro.getObject().jvnGetObjectState();
 	   }
 	   //signal all readers
 	   for(JvnRemoteServer server : ro.getCurrentReaders()){
