@@ -59,8 +59,9 @@ public class Irc {
 		Button write_button = new Button("write");
 		write_button.addActionListener(new writeListener(this));
 		frame.add(write_button);
-		//placeholder
-		frame.add(new Button("Quit"));
+		Button quit_button = new Button("quit");
+		quit_button.addActionListener(new quitListener());
+		frame.add(quit_button);
 		frame.setSize(545,201);
 		text.setBackground(Color.black); 
 		frame.setVisible(true);
@@ -114,6 +115,23 @@ public class Irc {
 	}
 }
 
+ /**
+  * Internal class to manage user events (write) on the CHAT application
+  **/
+ class quitListener implements ActionListener {
+  
+  /**
+    * Management of user events
+   **/
+	public void actionPerformed (ActionEvent e) {
+		try {
+			JvnServerImpl.jvnGetServer().jvnTerminate();
+		} catch (JvnException e1) {
+			e1.printStackTrace();
+		}
+		System.exit(0);
+	}
+}
 
 
 
