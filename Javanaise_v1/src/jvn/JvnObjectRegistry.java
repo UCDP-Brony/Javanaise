@@ -56,6 +56,14 @@ public class JvnObjectRegistry {
 		 
 	 }
 	 
+	 public void terminateServer(JvnRemoteServer js){
+		 int i = 0;
+		 while(i < MAXENTRY){
+			 registry[i].removeFromAll(js);
+			 i++;
+		 }
+	 }
+	 
 	 
 	
 }

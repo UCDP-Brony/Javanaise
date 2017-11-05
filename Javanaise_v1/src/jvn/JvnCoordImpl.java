@@ -130,7 +130,7 @@ public class JvnCoordImpl
 	**/
     public synchronized void jvnTerminate(JvnRemoteServer js)
 	 throws java.rmi.RemoteException, JvnException {
-	 // to be completed
+    	this.objectRegistry.terminateServer(js);
     }
 }
 

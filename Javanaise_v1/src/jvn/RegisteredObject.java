@@ -56,4 +56,11 @@ public class RegisteredObject {
 		public void removeServer(JvnRemoteServer server){
 			servers.remove(server);
 		}
+		
+		public void removeFromAll(JvnRemoteServer server){
+			servers.remove(server);
+			readers.remove(server);
+			if(writer.equals(server))
+				writer = null;
+		}
 }
