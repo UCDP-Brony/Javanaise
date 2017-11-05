@@ -60,7 +60,7 @@ public class RegisteredObject {
 		public void removeFromAll(JvnRemoteServer server){
 			servers.remove(server);
 			readers.remove(server);
-			if(writer.equals(server))
+			if(server.equals(writer))
 				writer = null;
 		}
 }
