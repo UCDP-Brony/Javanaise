@@ -9,9 +9,8 @@ Server
 
 Wait/notify
 
-Bouton unlock
+Bouton quit
 
+Dynamic proxies
 
-# TODO :
-
-Bouton quit : actuellement un placeholder
+Mode burst
