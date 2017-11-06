@@ -12,8 +12,10 @@ public class JvnObjectRegistry {
 			registry[i] = new RegisteredObject();
 	}
 	
-	public int getUniqueID(){
-		//TODO check MAXENTRY and throw exception
+	public int getUniqueID() throws JvnException{
+		if (idMachine == 100){
+			throw new JvnException("Error, number of registered objects exceeded");
+		}
 		idMachine++;
 		return idMachine;
 	}
@@ -56,6 +58,11 @@ public class JvnObjectRegistry {
 		 
 	 }
 	 
+	 /**
+	  * 
+	  * @param js the server terminating
+	  * remove all occurrences of the server in the registered objects
+	  */
 	 public void terminateServer(JvnRemoteServer js){
 		 int i = 0;
 		 while(i < MAXENTRY){

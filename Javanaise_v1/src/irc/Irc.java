@@ -94,7 +94,7 @@ public class Irc {
 }
 
  /**
-  * Internal class to manage user events (write) on the CHAT application
+  * Internal class to manage user events (quit) on the CHAT application
   **/
  class writeListener implements ActionListener {
 	Irc irc;

@@ -10,10 +10,9 @@ import jvn.JvnServerImpl;
 
 public class DummyClient implements Runnable{
 	
-	private final static int NBREQUEST = 5000;
+	private final static int NBREQUEST = 1000000;
 	
 	public void run(){
-		
 		SentenceInterface s = null;
 		try {
 			s = (SentenceInterface) JvnProxy.newInstance(new Sentence(), "IRC");
@@ -36,9 +35,9 @@ public class DummyClient implements Runnable{
 		try {
 			JvnServerImpl.jvnGetServer().jvnTerminate();
 		} catch (JvnException e) {
+			System.out.println("An error occured");
 			e.printStackTrace();
 		}
-		System.exit(0);
 		
 	}
 
